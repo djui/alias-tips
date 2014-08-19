@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import os
+import subprocess
+import sys
+
+
+def inform(s):
+    COLOR_BLUE_NORMAL = '\033[94m'
+    COLOR_BLUE_BOLD = '\033[1;94m'
+    COLOR_RESET = '\033[0m'
+    DEFAULT_TEXT = 'You know you have an alias for that, right? '
+    text = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', DEFAULT_TEXT)
+    print(COLOR_BLUE_NORMAL + text + COLOR_BLUE_BOLD + s + COLOR_RESET)
+
+
+def get_aliases():
+    aliases = [line.strip().split('=', 1) for line in sys.stdin.readlines()]
+    return [(alias[0], alias[1].strip('\'')) for alias in aliases] 
+
+
+def main():
+    aliases = get_aliases()
+    command = sys.argv[1]
+    
+    candidate, res = '', ''
+    for alias, expanded in aliases:
+        if command.find(expanded, 0) > -1:
+            if len(expanded) > len(candidate):
+               tail = command[len(expanded):]
+               res = alias + tail
+               candidate, res = expanded, res
+    if res:   
+        inform(res)
+
+
+if __name__ == '__main__':
+    main()
