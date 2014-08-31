@@ -22,15 +22,15 @@ def get_aliases():
 
 def main():
     aliases = get_aliases()
-    command = sys.argv[1]
-    candidate, res = '', ''
+    input = sys.argv[1]
 
+    max_idx, res = 0, None
     for alias, expanded in aliases:
-        if command.find(expanded, 0) > -1:
-            if len(expanded) > len(candidate):
-               tail = command[len(expanded):]
-               res = alias + tail
-               candidate, res = expanded, res
+        if input.startswith(expanded):
+            idx = len(expanded)
+            if idx > max(len(alias), max_idx):
+                max_idx = idx
+                res = alias + input[idx:]
     if res:
         inform(res)
 
