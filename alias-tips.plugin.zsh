@@ -1,3 +1,5 @@
+PLUGIN_DIR=$(dirname $0)
+
 preexec() {
-    alias | "$ZSH_CUSTOM/plugins/alias-tips/alias-tips" $*
+  alias | ${PLUGIN_DIR}/alias-tips $*
 }
