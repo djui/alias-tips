@@ -1,5 +1,4 @@
-alias-tips
-==========
+# alias-tips
 
 An oh-my-zsh plugin to help remembering thoses aliases you defined onces.
 
@@ -11,8 +10,7 @@ can't remember them correctly, or just have forgotten about some aliases, or
 that aliases for your daily commands actually exist.
 
 
-Example
-=======
+# Example
 
 ```sh
 $ ls -lh
@@ -28,8 +26,12 @@ You know you have an alias for that, right? gri master
 :
 ```
 
-Installation
-============
+# Installation
+
+## antigen
+1. Add `antigen bundle djui/alias-tips` to your `.zshrc` with your other antigen bundle commands.
+
+## oh-my-zsh
 
 1. Get it
 
@@ -71,8 +73,7 @@ Installation
     ```
 
 
-Usage
-=====
+# Usage
 
 After installation re-source your `.zshrc`.
 
