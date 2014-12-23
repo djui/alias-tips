@@ -1,11 +1,11 @@
 # alias-tips
 
-An oh-my-zsh plugin to help remembering thoses aliases you defined onces.
+An oh-my-zsh plugin to help remembering thoses aliases you defined once.
 
 It works by trying to find an alias for the command you are currently trying to
 execute and printing a help line reminding you about that alias.
 
-The idea is that you mind be too afraid to execute aliases defined because you
+The idea is that you might be too afraid to execute aliases defined because you
 can't remember them correctly, or just have forgotten about some aliases, or
 that aliases for your daily commands actually exist.
 
@@ -72,6 +72,10 @@ You know you have an alias for that, right? gri master
     # +plugins=(... alias-tips)
     ```
 
+## zgen
+
+1. Add `zgen load djui/alias-tips` to your `.zshrc`
+2. Regenerate your `init.zsh` with `zgen save`
 
 # Usage
 
