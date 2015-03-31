@@ -17,8 +17,17 @@ def inform(s):
 
 def parse_aliases(raw_aliases):
     aliases = [line.strip().split('=', 1) for line in raw_aliases]
-    return [(alias[0], alias[1].strip('\'')) for alias in aliases]
-
+    mapping = []
+    for alias_line in aliases:
+        try:
+            alias = alias_line[0].strip('\'')
+            original = alias_line[1].strip('\'')
+            mapping.append((alias, original))
+        except:
+            # If this fails, it's likely a multi-line declared alias,
+            # which is currently not handled.
+            pass
+    return mapping
 
 def main():
     raw_aliases = sys.stdin.readlines()
