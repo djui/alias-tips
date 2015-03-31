@@ -15,13 +15,14 @@ def inform(s):
     print(COLOR_BLUE_NORMAL + text + COLOR_BLUE_BOLD + s + COLOR_RESET)
 
 
-def get_aliases():
-    aliases = [line.strip().split('=', 1) for line in sys.stdin.readlines()]
+def parse_aliases(raw_aliases):
+    aliases = [line.strip().split('=', 1) for line in raw_aliases]
     return [(alias[0], alias[1].strip('\'')) for alias in aliases]
 
 
 def main():
-    aliases = get_aliases()
+    raw_aliases = sys.stdin.readlines()
+    aliases = parse_aliases(raw_aliases)
     input = sys.argv[1]
 
     max_idx, res = 0, None
