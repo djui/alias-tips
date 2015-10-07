@@ -81,11 +81,23 @@ You know you have an alias for that, right? gri master
 
 After installation re-source your `.zshrc`.
 
+## Customizations
+
 The help string can be configured exporting an environment variable, e.g. in
 your `.zshrc`:
 
 ```sh
 :
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
+:
+```
+
+A list of aliases to be excluded from being reminded of can be configured
+exporting an environment variable of space separated aliases, e.g. in your
+`.zshrc`:
+
+```sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi"
 :
 ```
