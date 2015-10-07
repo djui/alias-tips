@@ -30,12 +30,15 @@ def parse_aliases(raw_aliases):
     return mapping
 
 def main():
+    excluded_aliases = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '').split()
     raw_aliases = sys.stdin.readlines()
     aliases = parse_aliases(raw_aliases)
     input = sys.argv[1]
 
     max_idx, res = 0, None
     for alias, expanded in aliases:
+        if alias in excluded_aliases:
+            continue
         if input.startswith(expanded):
             idx = len(expanded)
             if idx > max(len(alias), max_idx):
