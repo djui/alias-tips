@@ -1,5 +1,7 @@
 # alias-tips
 
+[![Build Status](https://travis-ci.org/djui/alias-tips.svg)](https://travis-ci.org/djui/alias-tips)
+
 A Zsh plugin to help remembering those aliases you once defined.
 
 Works with [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh),
