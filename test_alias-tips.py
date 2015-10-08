@@ -9,7 +9,8 @@ alias_tips = imp.load_source('alias-tips', 'alias-tips')
 
 def run_blackboxed(args, aliases):
     p = subprocess.Popen(['./alias-tips', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-    return p.communicate(input=aliases)[0]
+    stdout, _ = p.communicate(input=aliases.encode())
+    return stdout
 
 
 class TestAliasTipFormatting(TestCase):
@@ -111,24 +112,24 @@ class TestWhitebox(TestCase):
 
 class TestBlackbox(TestCase):
     def test_no_envs(self):
-        self.assertEqual(run_blackboxed('foo', ''), '')
+        self.assertEqual(run_blackboxed('foo', ''), b'')
 
     def test_text_env(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Foo')
-        self.assertEqual(run_blackboxed('bar', 'f=bar'), '\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
+        self.assertEqual(run_blackboxed('bar', 'f=bar'), b'\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
 
     def test_exclude_env(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Foo')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '"f b"')
-        self.assertEqual(run_blackboxed('bar', 'f=bar'), '\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
-        self.assertEqual(run_blackboxed('f', 'f=bar'), '')
-        self.assertEqual(run_blackboxed('b', 'f=bar'), '')
-        self.assertEqual(run_blackboxed('f', 'f=bar\nb=baz'), '')
-        self.assertEqual(run_blackboxed('b', 'f=bar\nb=baz'), '')
+        self.assertEqual(run_blackboxed('bar', 'f=bar'), b'\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
+        self.assertEqual(run_blackboxed('f', 'f=bar'), b'')
+        self.assertEqual(run_blackboxed('b', 'f=bar'), b'')
+        self.assertEqual(run_blackboxed('f', 'f=bar\nb=baz'), b'')
+        self.assertEqual(run_blackboxed('b', 'f=bar\nb=baz'), b'')
 
     def test_expand_env(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0')
-        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), '')
+        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '1')
-        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), '\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
+        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
