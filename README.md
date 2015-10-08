@@ -83,6 +83,8 @@ After installation re-source your `.zshrc`.
 
 ## Customizations
 
+### Customize the Output
+
 The help string can be configured exporting an environment variable, e.g. in
 your `.zshrc`:
 
@@ -91,6 +93,8 @@ your `.zshrc`:
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
 :
 ```
+
+### Exclude some Aliases
 
 A list of aliases to be excluded from being reminded of can be configured
 exporting an environment variable of space separated aliases, e.g. in your
@@ -101,3 +105,23 @@ exporting an environment variable of space separated aliases, e.g. in your
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi"
 :
 ```
+
+### Expand Command to Get Best Alias
+
+If you have several alias, e.g. for different git commands you can activate
+the expansion of the command before looking for an alias by setting the 
+environment variable, e.g. in your .zshrc:
+
+```sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
+:
+```
+
+Example:
+```sh
+alias gRv='git remote -v'
+alias gR='git remote'
+```
+Without the expand option `gR -v` will execute without a tip, with expand, it will suggest `gRv`.
+
