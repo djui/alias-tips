@@ -1,13 +1,17 @@
 # alias-tips
 
-An oh-my-zsh plugin to help remembering thoses aliases you defined once.
+A Zsh plugin to help remembering those aliases you once defined.
 
-It works by trying to find an alias for the command you are currently trying to
-execute and printing a help line reminding you about that alias.
+Works with [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh),
+[Antigen](http://antigen.sharats.me), [zgen](https://github.com/tarjoilija/zgen)
+or pure Zsh.
+
+It works by trying to find an alias for the command you are currently executing
+and printing a help line reminding you about that alias.
 
 The idea is that you might be too afraid to execute aliases defined because you
 can't remember them correctly, or just have forgotten about some aliases, or
-that aliases for your daily commands actually exist.
+that aliases for your daily commands even exist.
 
 
 # Example
@@ -26,10 +30,8 @@ You know you have an alias for that, right? gri master
 :
 ```
 
-# Installation
 
-## antigen
-1. Add `antigen bundle djui/alias-tips` to your `.zshrc` with your other antigen bundle commands.
+# Installation
 
 ## oh-my-zsh
 
@@ -72,14 +74,29 @@ You know you have an alias for that, right? gri master
     # +plugins=(... alias-tips)
     ```
 
+
+## antigen
+
+1. Add `antigen bundle djui/alias-tips` to your `.zshrc` with your other antigen
+   bundle commands.
+
+
 ## zgen
 
 1. Add `zgen load djui/alias-tips` to your `.zshrc`
 2. Regenerate your `init.zsh` with `zgen save`
 
+
+## Zsh
+
+1. Get it `git clone https://github.com/djui/alias-tips.git`
+2. Add `source alias-tips/alias-tips.plugin.zsh` to your `.zshrc`.
+
+
 # Usage
 
 After installation re-source your `.zshrc`.
+
 
 ## Customizations
 
