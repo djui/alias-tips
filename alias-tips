@@ -14,18 +14,18 @@ def inform(s, prefix):
 
 
 def parse_aliases(raw_aliases):
-    aliases = [line.strip().split('=', 1) for line in raw_aliases]
-    mapping = []
-    for alias_line in aliases:
+    aliases = []
+    for alias_line in raw_aliases:
         try:
-            alias = alias_line[0].strip('\'')
-            original = alias_line[1].strip('\'')
-            mapping.append((alias, original))
+            alias, expanded = alias_line.strip().split('=', 1)
+            alias = alias.strip('\'')
+            expanded = expanded.strip('\'')
+            aliases.append((alias, expanded))
         except:
             # If this fails, it's likely a multi-line declared alias,
             # which is currently not handled.
             pass
-    return mapping
+    return aliases
 
 
 def exclude_aliases(aliases, excludes):
