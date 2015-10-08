@@ -155,6 +155,17 @@ will suggest `gRv`.
 - Multiline aliases (aliases which definition span multiple lines) are not
   supported. Currently their first line only will be used (likely incorrectly)
 
+
+# FAQ
+
+**Q:** *Why only Zsh?*
+
+**A:** This works because of feature in Zsh called
+[preexec](http://zsh.sourceforge.net/Doc/Release/Functions.html). Other shells,
+e.g. Bash, do not have this feature. There are
+workarounds[[1](https://github.com/rcaloras/bash-preexec),[2](http://www.twistedmatrix.com/users/glyph/preexec.bash.txt)]
+but integrating these is a task left for the reader.
+
 # Contributions
 
 Thanks to the following people for their help:
