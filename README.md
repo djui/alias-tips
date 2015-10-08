@@ -152,7 +152,8 @@ will suggest `gRv`.
   aliases ("command position") are supported. Check the
   [Zsh manual](http://zsh.sourceforge.net/Doc/Release/Shell-Builtin-Commands.html#Shell-Builtin-Commands)
   on `alias` for their definition.
-
+- Multiline aliases (aliases which definition span multiple lines) are not
+  supported. Currently their first line only will be used (likely incorrectly)
 
 # Contributions
 
