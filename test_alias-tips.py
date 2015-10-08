@@ -8,7 +8,7 @@ alias_tips = imp.load_source('alias-tips', 'alias-tips')
 
 
 def run_blackboxed(args, aliases):
-    p = subprocess.Popen(['alias-tips', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    p = subprocess.Popen(['./alias-tips', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
     return p.communicate(input=aliases)[0]
 
 
