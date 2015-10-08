@@ -54,7 +54,7 @@ def find_alias(aliases, input):
 
 
 def main():
-    input    = sys.argv[1]
+    input    = sys.argv[1].strip()
     aliases  = parse_aliases(sys.stdin.readlines())
     prefix   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Alias tip: ')
     excludes = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '')
