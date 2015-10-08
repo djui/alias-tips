@@ -36,6 +36,19 @@ def main():
     input = sys.argv[1]
 
     max_idx, res = 0, None
+    if(os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0') == '1'):
+       max_exp, max_expanded = 0, None
+       for alias, expanded in aliases:
+           if alias in excluded_aliases:
+               continue
+           if input.startswith(alias+' '):
+               if(len(expanded) > max_exp):
+                   max_expanded = input.replace(alias, expanded)
+                   max_exp = len(expanded)
+
+       if(max_expanded != None):
+           input = max_expanded
+
     for alias, expanded in aliases:
         if alias in excluded_aliases:
             continue
