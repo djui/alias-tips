@@ -146,9 +146,10 @@ Without the expand option `gR -v` will execute without a tip, with expand, it
 will suggest `gRv`.
 
 
+
 # Contributions
 
-Thanks to the following for the their help:
+Thanks to the following people for their help:
 
 - [m42e](https://github.com/m42e)
 - [unixorn](https://github.com/unixorn)
