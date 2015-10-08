@@ -177,4 +177,5 @@ Thanks to the following people for their help:
 
 ## Testing
 
-    $ python -m unittest test_alias-tips
+    $ python  -m unittest test_alias-tips
+    $ python3 -m unittest test_alias-tips
