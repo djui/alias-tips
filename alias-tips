@@ -6,11 +6,11 @@ import os
 import sys
 
 
-def inform(s, prefix):
+def format_tip(s, prefix):
     color_blue_normal = '\033[94m'
     color_blue_bold = '\033[1;94m'
     color_reset = '\033[0m'
-    print(color_blue_normal + prefix + color_blue_bold + s + color_reset)
+    return color_blue_normal + prefix + color_blue_bold + s + color_reset
 
 
 def parse_aliases(raw_aliases):
@@ -71,7 +71,7 @@ def main(args):
 
     alias = find_alias(aliases, input)
     if alias:
-        inform(alias, prefix)
+        print(format_tip(alias, prefix))
 
 
 if __name__ == '__main__':
