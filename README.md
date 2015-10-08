@@ -146,6 +146,13 @@ Without the expand option `gR -v` will execute without a tip, with expand, it
 will suggest `gRv`.
 
 
+# Limitations
+
+- *Suffix* and *Global* aliases are currently not supported. Only *Prefix*
+  aliases ("command position") are supported. Check the
+  [Zsh manual](http://zsh.sourceforge.net/Doc/Release/Shell-Builtin-Commands.html#Shell-Builtin-Commands)
+  on `alias` for their definition.
+
 
 # Contributions
 
