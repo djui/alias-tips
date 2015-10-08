@@ -29,7 +29,7 @@ def parse_aliases(raw_aliases):
 
 
 def exclude_aliases(aliases, excludes):
-    return filter(lambda (alias, _): alias not in excludes, aliases)
+    return [alias for alias in aliases if alias[0] not in excludes]
 
 
 def expand_input(aliases, input):
