@@ -6,13 +6,11 @@ import os
 import sys
 
 
-def inform(s):
-    COLOR_BLUE_NORMAL = '\033[94m'
-    COLOR_BLUE_BOLD = '\033[1;94m'
-    COLOR_RESET = '\033[0m'
-    DEFAULT_TEXT = 'You know you have an alias for that, right? '
-    text = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', DEFAULT_TEXT)
-    print(COLOR_BLUE_NORMAL + text + COLOR_BLUE_BOLD + s + COLOR_RESET)
+def inform(s, prefix):
+    color_blue_normal = '\033[94m'
+    color_blue_bold = '\033[1;94m'
+    color_reset = '\033[0m'
+    print(color_blue_normal + prefix + color_blue_bold + s + color_reset)
 
 
 def parse_aliases(raw_aliases):
@@ -30,36 +28,47 @@ def parse_aliases(raw_aliases):
     return mapping
 
 
-def main():
-    excluded_aliases = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '').split()
-    raw_aliases = sys.stdin.readlines()
-    aliases = parse_aliases(raw_aliases)
-    input = sys.argv[1]
+def exclude_aliases(aliases, excludes):
+    return filter(lambda (alias, _): alias not in excludes, aliases)
 
-    max_idx, res = 0, None
-    if os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0') == '1':
-       max_exp, max_expanded = 0, None
-       for alias, expanded in aliases:
-           if alias in excluded_aliases:
-               continue
-           if input.startswith(alias + ' '):
-               if len(expanded) > max_exp:
-                   max_expanded = input.replace(alias, expanded)
-                   max_exp = len(expanded)
 
-       if max_expanded != None:
-           input = max_expanded
-
+def expand_input(aliases, input):
+    max_exp, max_expanded = 0, None
     for alias, expanded in aliases:
-        if alias in excluded_aliases:
-            continue
+        if input.startswith(alias + ' '):
+            if len(expanded) > max_exp:
+                max_expanded = input.replace(alias, expanded)
+                max_exp = len(expanded)
+    return max_expanded if max_expanded else input
+
+
+def find_alias(aliases, input):
+    max_idx, res = 0, None
+    for alias, expanded in aliases:
         if input.startswith(expanded):
             idx = len(expanded)
             if idx > max(len(alias), max_idx):
                 max_idx = idx
                 res = alias + input[idx:]
-    if res:
-        inform(res)
+    return res
+
+
+def main():
+    input    = sys.argv[1]
+    aliases  = parse_aliases(sys.stdin.readlines())
+    prefix   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Alias tip: ')
+    excludes = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '')
+    expand   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0')
+
+    if excludes:
+        aliases = exclude_aliases(aliases, excludes.split())
+
+    if expand == '1':
+        input = expand_input(aliases, input)
+
+    alias = find_alias(aliases, input)
+    if alias:
+        inform(alias, prefix)
 
 
 if __name__ == '__main__':
