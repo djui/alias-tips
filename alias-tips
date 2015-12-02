@@ -54,13 +54,18 @@ def find_alias(aliases, input):
 
 
 def run(aliases, input, expand, excludes):
+    original_input = input
     if excludes:
         aliases = exclude_aliases(aliases, excludes.split())
 
     if expand:
         input = expand_input(aliases, input)
 
-    return find_alias(aliases, input)
+    alias = find_alias(aliases, input)
+
+    if alias == original_input:
+       return None
+    return alias
 
 
 def main(args):
