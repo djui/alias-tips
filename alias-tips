@@ -45,7 +45,7 @@ def expand_input(aliases, input):
 def find_alias(aliases, input):
     max_idx, res = 0, None
     for alias, expanded in aliases:
-        if input.startswith(expanded):
+        if input == expanded or input.startswith(expanded + ' '):
             idx = len(expanded)
             if idx > max(len(alias), max_idx):
                 max_idx = idx
