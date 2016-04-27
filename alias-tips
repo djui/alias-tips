@@ -87,6 +87,8 @@ def main(args):
 
     if alias:
         print(format_tip(alias, prefix))
+    else:
+        sys.exit(1)
 
 
 if __name__ == '__main__':
