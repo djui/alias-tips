@@ -18,8 +18,17 @@ def parse_aliases(raw_aliases):
     for alias_line in raw_aliases:
         try:
             alias, expanded = alias_line.strip().split('=', 1)
-            alias = alias.strip('\'')
-            expanded = expanded.strip('\'')
+
+            alias = alias.strip()
+            if alias.startswith('\'') and alias.endswith('\''):
+                alias = alias.strip('\'')
+            alias = alias.strip()
+
+            expanded = expanded.strip()
+            if expanded.startswith('\'') and expanded.endswith('\''):
+                expanded = expanded.strip('\'')
+            expanded = expanded.strip()
+
             aliases.append((alias, expanded))
         except:
             # If this fails, it's likely a multi-line declared alias,
