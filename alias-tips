@@ -45,6 +45,7 @@ def expand_input(aliases, input):
     max_exp, max_expanded = 0, None
     for alias, expanded in aliases:
         if (input.startswith(alias + ' ') and
+            len(expanded) > len(alias) and
             len(expanded) > max_exp):
             max_expanded = input.replace(alias, expanded, 1)
             max_exp = len(expanded)
