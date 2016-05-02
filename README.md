@@ -2,14 +2,15 @@
 
 [![Build Status](https://travis-ci.org/djui/alias-tips.svg)](https://travis-ci.org/djui/alias-tips)
 
-A Zsh plugin to help remembering those aliases you once defined.
+A Zsh plugin to help remembering those shell aliases and Git aliases you once
+defined.
 
 Works with [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh),
 [Antigen](http://antigen.sharats.me), [zgen](https://github.com/tarjoilija/zgen)
 or pure Zsh.
 
-It works by trying to find an alias for the command you are currently executing
-and printing a help line reminding you about that alias.
+It works by trying to find an shell or Git alias for the command you are
+currently executing and printing a help line reminding you about that alias.
 
 The idea is that you might be too afraid to execute aliases defined because you
 can't remember them correctly, or just have forgotten about some aliases, or
@@ -29,6 +30,10 @@ You know you have an alias for that, right? gg
 
 $ git rebase --interactive master
 You know you have an alias for that, right? gri master
+:
+
+$ git status
+You know you have an alias for that, right? git st
 :
 ```
 
