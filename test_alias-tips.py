@@ -1,5 +1,5 @@
 from subprocess import PIPE
-from unittest import TestCase, expectedFailure, skip
+from unittest import TestCase, expectedFailure
 import imp
 import os
 import subprocess
@@ -79,11 +79,11 @@ class TestAliasExpand(TestCase):
 
 class TestFindAlias(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.find_alias([], ''), None)
-        self.assertEqual(alias_tips.find_alias([], 'foo'), None)
+        self.assertEqual(alias_tips.find_alias([], ''), '')
+        self.assertEqual(alias_tips.find_alias([], 'foo'), 'foo')
 
-    def test_ignore_equal_length(self):
-        self.assertEqual(alias_tips.find_alias([('foo', 'bar')], 'bar'), None)
+    def test_equal_length(self):
+        self.assertEqual(alias_tips.find_alias([('foo', 'bar')], 'bar'), 'foo')
 
     def test_single(self):
         self.assertEqual(alias_tips.find_alias([('f', 'bar')], 'bar'), 'f')
@@ -97,12 +97,11 @@ class TestFindAlias(TestCase):
 
 class TestWhitebox(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.run([], 'bar -v', False, []), None)
+        self.assertEqual(alias_tips.run([], 'bar -v', False, []), 'bar -v')
 
     def test_simple(self):
         self.assertEqual(alias_tips.run([('f', 'bar'), ('g', 'baz')], 'bar -v', False, []), 'f -v')
 
-    @skip('This should work')
     def test_multiple_exchanges(self):
         self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar -v', False, []), 'f -v')
         self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar -v', True, []), 'f -v')
@@ -131,5 +130,7 @@ class TestBlackbox(TestCase):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0')
         self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
+        self.assertEqual(run_blackboxed('gR -v -foo', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '1')
         self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
+        self.assertEqual(run_blackboxed('gR -v -foo', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv -foo\x1b[0m\n')
