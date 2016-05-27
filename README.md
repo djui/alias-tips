@@ -118,6 +118,7 @@ export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
 :
 ```
 
+
 ### Exclude some Aliases
 
 A list of aliases to be excluded from being reminded of can be configured
@@ -129,6 +130,7 @@ exporting an environment variable of space separated aliases, e.g. in your
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi"
 :
 ```
+
 
 ### Disable Command Expansion
 
@@ -154,6 +156,7 @@ export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 :
 ```
 
+
 # Limitations
 
 - *Suffix* and *Global* aliases are currently not supported. Only *Prefix*
@@ -174,14 +177,13 @@ e.g. Bash, do not have this feature. There are
 workarounds[[1](https://github.com/rcaloras/bash-preexec),[2](http://www.twistedmatrix.com/users/glyph/preexec.bash.txt)]
 but integrating these is a task left for the reader.
 
-# Contributing
 
-Thanks to the following people for their help:
-
-- [m42e](https://github.com/m42e)
-- [unixorn](https://github.com/unixorn)
-
-## Testing
+# Testing
 
     $ python  -m unittest test_alias-tips
     $ python3 -m unittest test_alias-tips
+
+
+# Contributing
+
+See: [CONTRIBUTIONS.md](CONTRIBUTIONS.md).
