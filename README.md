@@ -21,19 +21,19 @@ that aliases for your daily commands even exist.
 
 ```sh
 $ ls -lh
-You know you have an alias for that, right? ll
+Alias tip: ll
 :
 
 $ git gui
-You know you have an alias for that, right? gg
+Alias tip: gg
 :
 
 $ git rebase --interactive master
-You know you have an alias for that, right? gri master
+Alias tip: grbi master
 :
 
 $ git status
-You know you have an alias for that, right? git st
+Alias tip: g st
 :
 ```
 
