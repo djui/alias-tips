@@ -53,29 +53,29 @@ def expand_input(aliases, input):
 
 
 def find_alias(aliases, input):
-    max_idx, res = 0, None
-    for alias, expanded in aliases:
-        if input == expanded or input.startswith(expanded + ' '):
-            idx = len(expanded)
-            if idx > max(len(alias), max_idx):
-                max_idx = idx
-                res = alias + input[idx:]
+    aliases.sort()
+    aliases.sort(key=lambda x: len(x[1]), reverse=True)
+
+    res_prev, res = None, input
+
+    while res_prev != res:
+        res_prev = res
+        for alias, expanded in aliases:
+            if res == expanded or res.startswith(expanded + ' '):
+                idx = len(expanded)
+                res = alias + res[idx:]
+
     return res
 
 
 def run(aliases, input, expand, excludes):
-    original_input = input
     if excludes:
         aliases = exclude_aliases(aliases, excludes.split())
 
     if expand:
         input = expand_input(aliases, input)
 
-    alias = find_alias(aliases, input)
-
-    if alias == original_input:
-       return None
-    return alias
+    return find_alias(aliases, input)
 
 
 def main(args):
@@ -86,7 +86,7 @@ def main(args):
     aliases  = parse_aliases(sys.stdin.readlines())
     alias    = run(aliases, input, expand, excludes)
 
-    if alias:
+    if alias != input:
         print(format_tip(alias, prefix))
     else:
         sys.exit(1)

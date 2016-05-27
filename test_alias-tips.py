@@ -1,5 +1,5 @@
 from subprocess import PIPE
-from unittest import TestCase, expectedFailure, skip
+from unittest import TestCase, expectedFailure
 import imp
 import os
 import subprocess
@@ -23,7 +23,7 @@ class TestAliasTipFormatting(TestCase):
 
 class TestAliasParsing(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.parse_aliases([]), [])
+        self.assertEqual(alias_tips.parse_aliases([]),   [])
         self.assertEqual(alias_tips.parse_aliases(['']), [])
 
     def test_simpliest(self):
@@ -49,6 +49,9 @@ class TestAliasParsing(TestCase):
     def test_skipmultiline(self):
         self.assertEqual(alias_tips.parse_aliases(['foo=\'bar', 'baz']), [])
 
+    def test_git_alias(self):
+        self.assertEqual(alias_tips.parse_aliases(['git st = git status -sb']), [('git st', 'git status -sb')])
+
 
 class TestAliasExcludes(TestCase):
     def test_no_excludes(self):
@@ -71,7 +74,7 @@ class TestAliasExpand(TestCase):
 
     def test_no_expand(self):
         self.assertEqual(alias_tips.expand_input([('gRv', 'git remote -v')], 'gR -v'), 'gR -v')
-        self.assertEqual(alias_tips.expand_input([('gR', 'git remote')], 'gR -v'), 'git remote -v')
+        self.assertEqual(alias_tips.expand_input([('gR',  'git remote')],    'gR -v'), 'git remote -v')
 
     def test_expand(self):
         self.assertEqual(alias_tips.expand_input([('gRv', 'git remote -v'), ('gR', 'git remote')], 'gR -v'), 'git remote -v')
@@ -79,11 +82,11 @@ class TestAliasExpand(TestCase):
 
 class TestFindAlias(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.find_alias([], ''), None)
-        self.assertEqual(alias_tips.find_alias([], 'foo'), None)
+        self.assertEqual(alias_tips.find_alias([], ''), '')
+        self.assertEqual(alias_tips.find_alias([], 'foo'), 'foo')
 
-    def test_ignore_equal_length(self):
-        self.assertEqual(alias_tips.find_alias([('foo', 'bar')], 'bar'), None)
+    def test_equal_length(self):
+        self.assertEqual(alias_tips.find_alias([('foo', 'bar')], 'bar'), 'foo')
 
     def test_single(self):
         self.assertEqual(alias_tips.find_alias([('f', 'bar')], 'bar'), 'f')
@@ -94,20 +97,23 @@ class TestFindAlias(TestCase):
     def test_pick_first_of_multiple(self):
         self.assertEqual(alias_tips.find_alias([('f', 'bar'), ('g', 'bar')], 'bar -v'), 'f -v')
 
+    def test_multiple(self):
+        self.assertEqual(alias_tips.find_alias([('g', 'git'), ('git st', 'git status -sb')], 'git status -sb'), 'g st')
 
 class TestWhitebox(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.run([], 'bar -v', False, []), None)
+        self.assertEqual(alias_tips.run([], 'bar -v', False, []), 'bar -v')
 
     def test_simple(self):
         self.assertEqual(alias_tips.run([('f', 'bar'), ('g', 'baz')], 'bar -v', False, []), 'f -v')
 
-    @skip('This should work')
     def test_multiple_exchanges(self):
-        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar -v', False, []), 'f -v')
-        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar -v', True, []), 'f -v')
-        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar', False, []), 'f')
-        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')], 'bar', True, []), 'f')
+        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')],                  'bar -v',         False, []), 'f -v')
+        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')],                  'bar -v',         True,  []), 'f -v')
+        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')],                  'bar',            False, []), 'f')
+        self.assertEqual(alias_tips.run([('ff', 'bar'), ('f', 'ff')],                  'bar',            True,  []), 'f')
+        self.assertEqual(alias_tips.run([('g', 'git'),  ('git st', 'git status -sb')], 'git status -sb', True,  []), 'g st')
+        self.assertEqual(alias_tips.run([('g', 'git'),  ('git st', 'git status -sb')], 'git status -sb', False, []), 'g st')
 
 
 class TestBlackbox(TestCase):
@@ -121,15 +127,25 @@ class TestBlackbox(TestCase):
     def test_exclude_env(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Foo')
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '"f b"')
-        self.assertEqual(run_blackboxed('bar', 'f=bar'), b'\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
-        self.assertEqual(run_blackboxed('f', 'f=bar'), b'')
-        self.assertEqual(run_blackboxed('b', 'f=bar'), b'')
+        self.assertEqual(run_blackboxed('bar', 'f=bar'),      b'\x1b[94mFoo\x1b[1;94mf\x1b[0m\n')
+        self.assertEqual(run_blackboxed('f', 'f=bar'),        b'')
+        self.assertEqual(run_blackboxed('b', 'f=bar'),        b'')
         self.assertEqual(run_blackboxed('f', 'f=bar\nb=baz'), b'')
         self.assertEqual(run_blackboxed('b', 'f=bar\nb=baz'), b'')
 
+    def test_multiple(self):
+        os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
+        self.assertEqual(run_blackboxed('git status -sb', 'g=\'git\'\ngit st = git status -sb'), b'\x1b[94m\x1b[1;94mg st\x1b[0m\n')
+
     def test_expand_env(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
+
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '0')
-        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
+        self.assertEqual(run_blackboxed('gR -v',          'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
+        self.assertEqual(run_blackboxed('gR -v -foo',     'gRv=\'git remote -v\'\ngR=\'git remote\''), b'')
+        self.assertEqual(run_blackboxed('g status -sb',   'g=\'git\'\ngit st = git status -sb'),       b'')
+
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '1')
-        self.assertEqual(run_blackboxed('gR -v', 'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
+        self.assertEqual(run_blackboxed('gR -v',          'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
+        self.assertEqual(run_blackboxed('gR -v -foo',     'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv -foo\x1b[0m\n')
+        self.assertEqual(run_blackboxed('g status -sb',   'g=\'git\'\ngit st = git status -sb'),       b'\x1b[94m\x1b[1;94mg st\x1b[0m\n')
