@@ -130,17 +130,10 @@ export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi"
 :
 ```
 
-### Expand Command to Get Best Alias
+### Disable Command Expansion
 
-If you have several alias, e.g. for different git commands you can activate the
-expansion of the command before looking for an alias by setting the environment
-variable, e.g. in your .zshrc:
-
-```sh
-:
-export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
-:
-```
+If you have several alias, e.g. for different git commands the command get
+expanded before looking for an alias.
 
 Example:
 
@@ -152,6 +145,14 @@ alias gR='git remote'
 Without the expand option `gR -v` will execute without a tip, with expand, it
 will suggest `gRv`.
 
+If this may not be desired, the behaviour can be disabled by setting the
+environment variable, e.g. in your .zshrc:
+
+```sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
+:
+```
 
 # Limitations
 
