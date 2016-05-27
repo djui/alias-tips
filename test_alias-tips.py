@@ -4,11 +4,11 @@ import imp
 import os
 import subprocess
 
-alias_tips = imp.load_source('alias-tips', 'alias-tips')
+alias_tips = imp.load_source('alias-tips', 'alias-tips.py')
 
 
 def run_blackboxed(args, aliases):
-    p = subprocess.Popen(['./alias-tips', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    p = subprocess.Popen(['python', './alias-tips.py', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
     stdout, _ = p.communicate(input=aliases.encode())
     return stdout
 
