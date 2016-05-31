@@ -1,5 +1,5 @@
 from subprocess import PIPE
-from unittest import TestCase, expectedFailure
+from unittest import TestCase, expectedFailure, skip
 import imp
 import os
 import subprocess
@@ -99,6 +99,103 @@ class TestFindAlias(TestCase):
 
     def test_multiple(self):
         self.assertEqual(alias_tips.find_alias([('g', 'git'), ('git st', 'git status -sb')], 'git status -sb'), 'g st')
+
+class TestFlags(TestCase):
+    def test_short_flags(self):
+        self.assertEqual(alias_tips.find_alias([('a',  'foo -a')],    'foo -a'), 'a')
+        self.assertEqual(alias_tips.find_alias([('ab', 'foo -a -b')], 'foo -a'), 'ab -b')
+        self.assertEqual(alias_tips.find_alias([('ab', 'foo -a -b')], 'foo -b'), 'ab -a')
+
+    def test_long_flags(self):
+        self.assertEqual(alias_tips.find_alias([('a',  'foo --aa')],      'foo --aa'), 'a')
+        self.assertEqual(alias_tips.find_alias([('ab', 'foo --aa --bb')], 'foo --aa'), 'ab --bb')
+        self.assertEqual(alias_tips.find_alias([('ab', 'foo --aa --bb')], 'foo --bb'), 'ab --aa')
+
+    def test_mixed_flags(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -ab')],    'foo -ab'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a -bc')], 'foo -a'),  'a -bc')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -ab -c')], 'foo -c'),  'a -ab')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -ab -c')], 'foo -ab'), 'a -c')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a -bc')], 'foo -bc'), 'a -a')
+
+    def test_combined_flags(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa')], 'foo -a --aa'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa')], 'foo --aa -a'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a --aa'), 'a --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo --aa -a'), 'a --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa')],    'foo --aa -a'), 'a -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa')],    'foo -a --aa'), 'a -a')
+
+    @unittest.skip("unsupported for now, likely forever")
+    def test_shortlong_flags(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -aa')],    'foo -aa'),    'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a -aa')], 'foo -aa -a'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a -aa')], 'foo -a -aa'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -aa')],    'foo -aa -a'), 'a -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -aa')],    'foo -a -aa'), 'a -a')
+
+    def test_shortflags_and_args(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo bar -a')],     'foo bar -a'),     'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a bar')],     'foo -a bar'),     'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a bar baz')], 'foo -a bar baz'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a bar')],     'foo -a bar baz'), 'a baz')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a bar')],     'foo -a bar baz'), 'a baz')
+
+    @unittest.skip("unsupported for now, likely forever")
+    def test_shortflags_and_args_indistuingishable(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],     'foo -b bar -a baz'), 'a baz -b bar') # or no match?!
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a baz')], 'foo -a bar baz'),    'a bar') # or no match?!
+
+    def test_longflags_and_args(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo bar --aa')],     'foo bar --aa'),     'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --a=bar')],      'foo --a=bar'),      'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --a=bar')],      'foo --a=bar baz'),  'a baz')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa=bar baz')], 'foo --aa=bar baz'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa bar')],     'foo --aa bar'),     'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa bar baz')], 'foo --aa bar baz'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa bar')],     'foo --aa bar baz'), 'a baz')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa bar')],     'foo --aa bar baz'), 'a baz')
+
+    @unittest.skip("unsupported for now, likely forever")
+    def test_longflags_and_args_indistuingishable(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa')],     'foo --bar bar --aa baz'), 'a baz --bb bar') # or no match?!
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa baz')], 'foo --aa bar baz'),       'a bar') # or no match?!
+
+    def test_mixedflags_and_args(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa bar')], 'foo -a --aa bar'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a bar --aa')], 'foo -a bar --aa'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa bar -a')], 'foo --aa bar -a'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa -a bar')], 'foo --aa -a bar'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo bar -a --aa')], 'foo bar -a --aa'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo bar --aa -a')], 'foo bar --aa -a'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa=bar')], 'foo -a --aa=bar'), 'a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa=bar -a')], 'foo --aa=bar -a'), 'a')
+
+    @unittest.skip("unsupported for now, likely forever")
+    def test_mixedflags_and_args_indistuingishable(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa bar')], 'foo -a --aa baz bar'), 'a baz') # or no match?!
+        self.assertEqual(alias_tips.find_alias([('a', 'foo --aa -a bar')], 'foo --aa -a baz bar'), 'a baz') # or no match?!
+
+    def test_flag_terminator(self):
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -- -a'),                  'foo -- -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -- --aa'),                'foo -- --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -- --aa -a'),             'foo -- --aa -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -- -a --aa'),             'foo -- -a --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a --'),                  'a --')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- bar'),              'a -- bar')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- -a'),               'a -- -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- bar -a'),           'a -- bar -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- --aa'),             'a -- --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- -a --aa'),          'a -- -a --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- --aa -a'),          'a -- --aa -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- bar --aa'),         'a -- bar --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- bar -a --aa'),      'a -- bar -a --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- bar --aa -a'),      'a -- bar --aa -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- -a --aa bar'),      'a -- bar -a --aa bar')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- -a bar --aa'),      'a -- bar -a bar --aa')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- --aa -a bar'),      'a -- bar --aa -a bar')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a')],      'foo -a -- --aa bar -a'),      'a -- bar --aa bar -a')
+        self.assertEqual(alias_tips.find_alias([('a', 'foo -a --aa')], 'foo -a --aa -- --aa bar -a'), 'a -- bar --aa bar -a')
 
 class TestWhitebox(TestCase):
     def test_no_aliases(self):
