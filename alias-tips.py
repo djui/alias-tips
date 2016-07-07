@@ -11,6 +11,25 @@ def format_tip(s, prefix):
     return color_blue_normal + prefix + color_blue_bold + s + color_reset
 
 
+def split(input):
+    aliases, functions = [], []
+    for line in input:
+        line = line.strip('\n')
+        if line.endswith(' () {'):
+            functions.append(line[:-5].strip())
+        elif '=' in line and not ( \
+                line.startswith('\t') or \
+                line.startswith(' ') or \
+                line.startswith('"') or \
+                line.startswith("'") or \
+                line.startswith('}') or \
+                line.startswith('EOF')):
+            # It's hard to exclude all accidental lines in function body without
+            # parsing it. This is "good enough"(tm)
+            aliases.append(line)
+    return aliases, functions
+
+
 def parse_aliases(raw_aliases):
     aliases = []
     for alias_line in raw_aliases:
@@ -39,7 +58,7 @@ def exclude_aliases(aliases, excludes):
     return [alias for alias in aliases if alias[0] not in excludes]
 
 
-def expand_input(aliases, input):
+def expand_input(input, aliases):
     max_exp, max_expanded = 0, None
     for alias, expanded in aliases:
         if (input.startswith(alias + ' ') and
@@ -71,7 +90,7 @@ def run(aliases, input, expand, excludes):
         aliases = exclude_aliases(aliases, excludes.split())
 
     if expand:
-        input = expand_input(aliases, input)
+        input = expand_input(input, aliases)
 
     return find_alias(aliases, input)
 
@@ -81,7 +100,14 @@ def main(args):
     expand   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '1') == '1'
     excludes = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '')
     input    = args[0].strip()  # Other args are resolved aliases
-    aliases  = parse_aliases(sys.stdin.readlines())
+    als, fns = split(sys.stdin.readlines())
+
+    # Don't suggest alias for functions
+    for fn in fns:
+        if input.startswith(fn):
+            sys.exit(1)
+
+    aliases  = parse_aliases(als)
     alias    = run(aliases, input, expand, excludes)
 
     if alias != input:

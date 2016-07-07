@@ -66,18 +66,18 @@ class TestAliasExcludes(TestCase):
 
 class TestAliasExpand(TestCase):
     def test_no_aliases(self):
-        self.assertEqual(alias_tips.expand_input([], ''), '')
-        self.assertEqual(alias_tips.expand_input([], 'gR -v'), 'gR -v')
+        self.assertEqual(alias_tips.expand_input('',      []), '')
+        self.assertEqual(alias_tips.expand_input('gR -v', []), 'gR -v')
 
     def test_no_input(self):
-        self.assertEqual(alias_tips.expand_input([('gRv', 'git remote -v'), ('gR', 'git remote')], ''), '')
+        self.assertEqual(alias_tips.expand_input('', [('gRv', 'git remote -v'), ('gR', 'git remote')]), '')
 
     def test_no_expand(self):
-        self.assertEqual(alias_tips.expand_input([('gRv', 'git remote -v')], 'gR -v'), 'gR -v')
-        self.assertEqual(alias_tips.expand_input([('gR',  'git remote')],    'gR -v'), 'git remote -v')
+        self.assertEqual(alias_tips.expand_input('gR -v', [('gRv', 'git remote -v')]), 'gR -v')
+        self.assertEqual(alias_tips.expand_input('gR -v', [('gR',  'git remote')]), 'git remote -v')
 
     def test_expand(self):
-        self.assertEqual(alias_tips.expand_input([('gRv', 'git remote -v'), ('gR', 'git remote')], 'gR -v'), 'git remote -v')
+        self.assertEqual(alias_tips.expand_input('gR -v', [('gRv', 'git remote -v'), ('gR', 'git remote')]), 'git remote -v')
 
 
 class TestFindAlias(TestCase):
@@ -99,6 +99,13 @@ class TestFindAlias(TestCase):
 
     def test_multiple(self):
         self.assertEqual(alias_tips.find_alias([('g', 'git'), ('git st', 'git status -sb')], 'git status -sb'), 'g st')
+
+class TestSplit(TestCase):
+    def test_split(self):
+        self.assertEqual(alias_tips.split(''),                                   ([], []))
+        self.assertEqual(alias_tips.split(['foo () {', '}']),                    ([], ['foo']))
+        self.assertEqual(alias_tips.split(['foo () {', '}', 'foo=bar']),         (['foo=bar'], ['foo']))
+        self.assertEqual(alias_tips.split(['foo () {', '\tfoo','}', 'foo=bar']), (['foo=bar'], ['foo']))
 
 class TestWhitebox(TestCase):
     def test_no_aliases(self):
