@@ -18,7 +18,7 @@ _alias_tips__preexec () {
 
   shell_aliases=$(alias)
 
-  shell_functions=$(functions)
+  shell_functions=$(functions | grep '^[^'$'\t'' _-].\+ () {$')
 
   echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | \
     python ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*

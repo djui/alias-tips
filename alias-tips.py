@@ -17,13 +17,7 @@ def split(input):
         line = line.strip('\n')
         if line.endswith(' () {'):
             functions.append(line[:-5].strip())
-        elif '=' in line and not ( \
-                line.startswith('\t') or \
-                line.startswith(' ') or \
-                line.startswith('"') or \
-                line.startswith("'") or \
-                line.startswith('}') or \
-                line.startswith('EOF')):
+        elif '=' in line:
             # It's hard to exclude all accidental lines in function body without
             # parsing it. This is "good enough"(tm)
             aliases.append(line)
