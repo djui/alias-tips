@@ -103,7 +103,7 @@ def main(args):
     aliases  = parse_aliases(als)
     alias    = run(aliases, input, expand, excludes)
 
-    if alias != input:
+    if len(alias) < len(input) and alias != input:
         print(format_tip(alias, prefix))
     else:
         sys.exit(1)
