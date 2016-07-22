@@ -140,6 +140,9 @@ class TestBlackbox(TestCase):
         self.assertEqual(run_blackboxed('f', 'f=bar\nb=baz'), b'')
         self.assertEqual(run_blackboxed('b', 'f=bar\nb=baz'), b'')
 
+    def test_no_same_length(self):
+        self.assertEqual(run_blackboxed('ls','ls=ls'), b'')
+
     def test_multiple(self):
         os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
         self.assertEqual(run_blackboxed('git status -sb', 'g=\'git\'\ngit st = git status -sb'), b'\x1b[94m\x1b[1;94mg st\x1b[0m\n')
