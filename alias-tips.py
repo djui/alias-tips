@@ -3,6 +3,8 @@ from __future__ import print_function
 import os
 import sys
 
+FORCE_EXIT_CODE = 10
+
 
 def format_tip(s, prefix):
     color_blue_normal = '\033[94m'
@@ -92,6 +94,7 @@ def main(args):
     prefix   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', 'Alias tip: ')
     expand   = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXPAND', '1') == '1'
     excludes = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES', '')
+    force    = os.getenv('ZSH_PLUGINS_ALIAS_TIPS_FORCE', '0') == '1'
     input    = args[0].strip()  # Other args are resolved aliases
     als, fns = split(sys.stdin.readlines())
 
@@ -105,6 +108,8 @@ def main(args):
 
     if len(alias) < len(input) and alias != input:
         print(format_tip(alias, prefix))
+        if force:
+            sys.exit(FORCE_EXIT_CODE)
     else:
         sys.exit(1)
 

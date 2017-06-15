@@ -157,6 +157,21 @@ export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 ```
 
 
+### Force Alias Use
+
+If you want to force yourself to use the aliases you set you can enable this
+option through this environmental variable:
+
+```
+:
+export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
+:
+```
+
+This will make alias-tips to abort the command you have entered if there exists
+an alias for it.
+
+
 # Limitations
 
 - *Suffix* and *Global* aliases are currently not supported. Only *Prefix*

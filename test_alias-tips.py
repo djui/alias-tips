@@ -8,9 +8,19 @@ alias_tips = imp.load_source('alias-tips', 'alias-tips.py')
 
 
 def run_blackboxed(args, aliases):
-    p = subprocess.Popen(['python', './alias-tips.py', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+    p = run_process(args)
     stdout, _ = p.communicate(input=aliases.encode())
     return stdout
+
+
+def run_blackboxed_exit_code(args, aliases):
+    p = run_process(args)
+    stdout, _ = p.communicate(input=aliases.encode())
+    return stdout, p.returncode
+
+
+def run_process(args):
+    return subprocess.Popen(['python', './alias-tips.py', args], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 
 class TestAliasTipFormatting(TestCase):
@@ -159,3 +169,13 @@ class TestBlackbox(TestCase):
         self.assertEqual(run_blackboxed('gR -v',          'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv\x1b[0m\n')
         self.assertEqual(run_blackboxed('gR -v -foo',     'gRv=\'git remote -v\'\ngR=\'git remote\''), b'\x1b[94m\x1b[1;94mgRv -foo\x1b[0m\n')
         self.assertEqual(run_blackboxed('g status -sb',   'g=\'git\'\ngit st = git status -sb'),       b'\x1b[94m\x1b[1;94mg st\x1b[0m\n')
+
+    def test_force_abort(self):
+        os.putenv('ZSH_PLUGINS_ALIAS_TIPS_FORCE', '1')
+        os.putenv('ZSH_PLUGINS_ALIAS_TIPS_TEXT', '')
+        stdout, returncode = run_blackboxed_exit_code('foo', 'b=foo')
+        self.assertEqual(returncode, alias_tips.FORCE_EXIT_CODE)
+        self.assertEqual(stdout, b'\x1b[94m\x1b[1;94mb\x1b[0m\n')
+        stdout, returncode = run_blackboxed_exit_code('foo', '')
+        self.assertNotEqual(returncode, alias_tips.FORCE_EXIT_CODE)
+        self.assertEqual(stdout, b'')
