@@ -168,7 +168,7 @@ export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
 :
 ```
 
-This will make alias-tips to abort the command you have entered if there exists
+This will cause alias-tips to abort the command you have entered if there exists
 an alias for it.
 
 
