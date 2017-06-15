@@ -27,10 +27,12 @@ _alias_tips__preexec () {
 
   shell_functions=$(functions | grep '^[a-zA-Z].\+ () {$')
 
+  # Exit code returned from python script when we want to force use of aliases.
+  local force_exit_code=10
   echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | \
     python ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*
   ret=$?
-  if [[ $ret = 10 ]]; then exit 10; fi
+  if [[ $ret = $force_exit_code ]]; then exit $force_exit_code; fi
 }
 
 autoload -Uz add-zsh-hook

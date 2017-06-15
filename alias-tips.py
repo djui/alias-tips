@@ -3,6 +3,8 @@ from __future__ import print_function
 import os
 import sys
 
+FORCE_EXIT_CODE = 10
+
 
 def format_tip(s, prefix):
     color_blue_normal = '\033[94m'
@@ -107,7 +109,7 @@ def main(args):
     if len(alias) < len(input) and alias != input:
         print(format_tip(alias, prefix))
         if force:
-            sys.exit(10)
+            sys.exit(FORCE_EXIT_CODE)
     else:
         sys.exit(1)
 
