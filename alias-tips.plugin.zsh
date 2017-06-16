@@ -32,7 +32,7 @@ _alias_tips__preexec () {
   echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | \
     python ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*
   ret=$?
-  if [[ $ret = $force_exit_code ]]; then exit $force_exit_code; fi
+  if [[ $ret = $force_exit_code ]]; then kill -s INT $$ ; fi
 }
 
 autoload -Uz add-zsh-hook
