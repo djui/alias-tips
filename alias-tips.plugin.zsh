@@ -8,8 +8,8 @@ if [[ -L ${0:a} ]]; then
 fi
 
 #export ZSH_PLUGINS_ALIAS_TIPS_TEXT="💡 Alias tip: "
-#export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ c"
-#export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ c"
+export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 
 _alias_tips__preexec () {
   if hash git 2> /dev/null; then
@@ -29,10 +29,9 @@ _alias_tips__preexec () {
 
   # Exit code returned from python script when we want to force use of aliases.
   local force_exit_code=10
-  echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | \
-    python ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*
-  ret=$?
-  if [[ $ret = $force_exit_code ]]; then kill -s INT $$ ; fi
+  local python_bin_prefix="/usr/bin"
+  [[ $(command -v pyenv &>/dev/null) ]] && python_bin_prefix="$(pyenv prefix)/bin"
+  echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | ${python_bin_prefix}/python  ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*
 }
 
 autoload -Uz add-zsh-hook
