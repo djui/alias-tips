@@ -23,9 +23,9 @@ _alias_tips__preexec () {
       sed 's/ = !/ = /')
   fi
 
-  shell_aliases=$(alias)
+  shell_aliases=$(\alias)
 
-  shell_functions=$(functions | grep '^[a-zA-Z].\+ () {$')
+  shell_functions=$(\functions | \egrep '^[a-zA-Z].+ \(\) \{$')
 
   # Exit code returned from python script when we want to force use of aliases.
   local force_exit_code=10
