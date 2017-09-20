@@ -8,8 +8,8 @@ if [[ -L ${0:a} ]]; then
 fi
 
 #export ZSH_PLUGINS_ALIAS_TIPS_TEXT="💡 Alias tip: "
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ c"
-export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
+#export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ c"
+#export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 
 _alias_tips__preexec () {
   if hash git 2> /dev/null; then
