@@ -17,10 +17,10 @@ _alias_tips__preexec () {
     # alias.foo bar      => git foo = git bar
     # alias.foo !git bar => git foo = git bar
     git_aliases=$(git config --get-regexp "^alias\." | \
-      sed 's/[ ]/ = /' | \
-      sed 's/^alias\./git /' | \
-      sed 's/ = \([^!]\)/ = git \1/' | \
-      sed 's/ = !/ = /')
+      \sed 's/[ ]/ = /' | \
+      \sed 's/^alias\./git /' | \
+      \sed 's/ = \([^!]\)/ = git \1/' | \
+      \sed 's/ = !/ = /')
   fi
 
   shell_aliases=$(\alias)
