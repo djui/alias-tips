@@ -12,6 +12,19 @@ fi
 #export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 
 _alias_tips__preexec () {
+  if [[ $1 != $2 ]] then # Alias is used
+    if [[ ${ZSH_PLUGINS_ALIAS_TIPS_REVEAL-0} == 1 ]] then # Reveal aliased command
+      if [[ ${${ZSH_PLUGINS_ALIAS_TIPS_REVEAL_EXCLUDES-()}[(I)$1]} != 0 ]] then # Exit
+        return 0
+      fi
+      local reveal_text=${ZSH_PLUGINS_ALIAS_TIPS_REVEAL_TEXT-${ZSH_PLUGINS_ALIAS_TIPS_TEXT-Alias tip: }}
+      local color_dark_gray='\e[1;30m'
+      local color_reset='\e[0m'
+      echo -e "$color_dark_gray$reveal_text$2 $color_reset"
+    fi
+    return 0
+  fi
+
   if hash git 2> /dev/null; then
 
     # alias.foo bar      => git foo = git bar
