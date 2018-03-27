@@ -82,6 +82,12 @@ Alias tip: g st
     ```
 
 
+## zplug
+
+1. Add `zplug "djui/alias-tips"` to your `.zshrc`
+2. Install it with `zplug install`
+
+
 ## antigen
 
 1. Add `antigen bundle djui/alias-tips` to your `.zshrc` with your other antigen
@@ -162,7 +168,7 @@ export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 If you want to force yourself to use the aliases you set you can enable this
 option through this environmental variable:
 
-```
+```sh
 :
 export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
 :
@@ -170,6 +176,35 @@ export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
 
 This will cause alias-tips to abort the command you have entered if there exists
 an alias for it.
+
+
+### Reveal Command
+
+If you want to reveal aliased command, e.g. to demonstrate your shell to someone else
+you can enable this option through this environmental variable:
+
+```sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_REVEAL=1
+:
+```
+
+Use this environmental variable to customize text:
+
+``````sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_REVEAL_TEXT="Alias tip: "
+:
+``````
+
+And this to exclude some obvious expansions:
+
+``````sh
+:
+export ZSH_PLUGINS_ALIAS_TIPS_REVEAL_EXCLUDES=(_ ll vi)
+:
+``````
+
 
 
 # Limitations
