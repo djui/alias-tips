@@ -100,6 +100,19 @@ Alias tip: g st
 2. Regenerate your `init.zsh` with `zgen save`
 
 
+## Arch Linux
+
+1. Install [`alias-tips-git`](https://aur.archlinux.org/packages/alias-tips-git/) from the [AUR](https://wiki.archlinux.org/index.php/Arch_User_Repository).
+
+2. Add the following to your `.zshrc`:
+
+    ```sh
+    source /usr/share/zsh/plugins/alias-tips/alias-tips.plugin.zsh
+    ```
+
+3. Start a new terminal session.
+
+
 ## Zsh
 
 1. Get it `git clone https://github.com/djui/alias-tips.git`
