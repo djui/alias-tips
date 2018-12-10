@@ -100,7 +100,7 @@ def main(args):
 
     # Don't suggest alias for functions
     for fn in fns:
-        if input.startswith(fn):
+        if input == fn:
             sys.exit(1)
 
     aliases  = parse_aliases(als)
