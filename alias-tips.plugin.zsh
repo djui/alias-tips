@@ -31,6 +31,7 @@ _alias_tips__preexec () {
 
     # alias.foo bar      => git foo = git bar
     # alias.foo !git bar => git foo = git bar
+    local git_aliases
     git_aliases=$(git config --get-regexp "^alias\." | \
       \sed 's/[ ]/ = /' | \
       \sed 's/^alias\./git /' | \
@@ -38,15 +39,17 @@ _alias_tips__preexec () {
       \sed 's/ = !/ = /')
   fi
 
+  local shell_aliases
   shell_aliases=$(\alias)
 
+  local shell_functions
   shell_functions=$(\functions | \egrep '^[a-zA-Z].+ \(\) \{$')
 
   # Exit code returned from python script when we want to force use of aliases.
   local force_exit_code=10
   echo $shell_functions "\n" $git_aliases "\n" $shell_aliases | \
     python ${_alias_tips__PLUGIN_DIR}/alias-tips.py $*
-  ret=$?
+  local ret=$?
   if [[ $ret = $force_exit_code ]]; then kill -s INT $$ ; fi
 }
 
