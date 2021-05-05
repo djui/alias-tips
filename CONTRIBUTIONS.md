@@ -11,6 +11,7 @@ Then open a pull-request.
 
 Credits for contributions:
 
+- [jeffreytse](https://github.com/jeffreytse)
 - [m42e](https://github.com/m42e)
 - [pradyunsg](https://github.com/pradyunsg)
 - [tomprince](https://github.com/tomprince)
