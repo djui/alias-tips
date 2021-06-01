@@ -214,7 +214,7 @@ And this to exclude some obvious expansions:
 
 ``````sh
 :
-export ZSH_PLUGINS_ALIAS_TIPS_REVEAL_EXCLUDES=(_ ll vi)
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES=(_ ll vi)
 :
 ``````
 
