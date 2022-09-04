@@ -43,7 +43,7 @@ _alias_tips__preexec () {
   shell_aliases=$(\alias)
 
   local shell_functions
-  shell_functions=$(\functions | \egrep -a '^[a-zA-Z].+ \(\) \{$')
+  shell_functions=$(\functions | \grep -E -a '^[a-zA-Z].+ \(\) \{$')
 
   # Exit code returned from python script when we want to force use of aliases.
   local force_exit_code=10
