@@ -5,9 +5,7 @@
 A Zsh plugin to help remembering those shell aliases and Git aliases you once
 defined.
 
-Works with [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh),
-[Antigen](http://antigen.sharats.me), [zgen](https://github.com/tarjoilija/zgen)
-or pure Zsh.
+Works with [Oh My Zsh](#oh-my-zsh), [Fig](#fig), [zplug](#zplug), [antigen](#antigen), [zgen](#zgen), [Arch Linux](#arch-linux), [Antigen](#antigen), or [pure Zsh](#zsh).
 
 It works by trying to find an shell or Git alias for the command you are
 currently executing and printing a help line reminding you about that alias.
@@ -40,7 +38,7 @@ Alias tip: g st
 
 # Installation
 
-## oh-my-zsh
+## [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh)
 
 1. Get it
 
@@ -91,19 +89,19 @@ Install `alias-tips` in just one click.
 <a href="https://fig.io/plugins/other/alias-tips_djui" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
 
 
-## zplug
+## [zplug](https://github.com/zplug/zplug)
 
 1. Add `zplug "djui/alias-tips"` to your `.zshrc`
 2. Install it with `zplug install`
 
 
-## antigen
+## [Antigen](https://github.com/zsh-users/antigen)
 
 1. Add `antigen bundle djui/alias-tips` to your `.zshrc` with your other antigen
    bundle commands.
 
 
-## zgen
+## [zgen](https://github.com/tarjoilija/zgen)
 
 1. Add `zgen load djui/alias-tips` to your `.zshrc`
 2. Regenerate your `init.zsh` with `zgen save`
