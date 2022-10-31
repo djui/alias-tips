@@ -5,7 +5,7 @@
 A Zsh plugin to help remembering those shell aliases and Git aliases you once
 defined.
 
-Works with [Oh My Zsh](#oh-my-zsh), [Fig](#fig), [zplug](#zplug), [antigen](#antigen), [zgen](#zgen), [Arch Linux](#arch-linux), [Antigen](#antigen), or [pure Zsh](#zsh).
+Works with [Oh My Zsh](#oh-my-zsh), [Fig](#fig), [zplug](#zplug), [antigen](#antigen), [zgen](#zgen), [Arch Linux](#arch-linux), or [pure Zsh](#zsh).
 
 It works by trying to find an shell or Git alias for the command you are
 currently executing and printing a help line reminding you about that alias.
