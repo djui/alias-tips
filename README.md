@@ -122,7 +122,7 @@ Install `alias-tips` in just one click.
 
 ## Zsh
 
-1. Get it `git clone https://github.com/djui/alias-tips.git`
+1. 1. Get it `git clone https://github.com/djui/alias-tips.git ~/.zsh/alias-tips`
 2. Add `source alias-tips/alias-tips.plugin.zsh` to your `.zshrc`.
 
 
