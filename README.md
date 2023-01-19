@@ -45,27 +45,27 @@ Alias tip: g st
     Go to your custom plugins folder:
 
     ```sh
-    $ cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
+    cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
     ```
 
     Then either clone:
 
     ```sh
-    $ git clone https://github.com/djui/alias-tips.git
+    git clone https://github.com/djui/alias-tips.git
     ```
 
     Or download:
 
     ```sh
-    $ wget https://github.com/djui/alias-tips/archive/master.zip
-    $ unzip master.zip && mv alias-tips-master alias-tips && rm master.zip
+    wget https://github.com/djui/alias-tips/archive/master.zip
+    unzip master.zip && mv alias-tips-master alias-tips && rm master.zip
     ```
 
     Or add it as submodule:
 
     ```sh
-    $ git submodule add https://github.com/djui/alias-tips
-    $ git submodule update --init
+    git submodule add https://github.com/djui/alias-tips
+    git submodule update --init
     ```
 
 2. Include it
@@ -73,7 +73,7 @@ Alias tip: g st
     Then add the plugin to your plugin list in oh-my-zsh configuration:
 
     ```sh
-    $ $EDITOR ~/.zshrc
+    $EDITOR ~/.zshrc
 
     # -plugins=(...)
     # +plugins=(... alias-tips)
