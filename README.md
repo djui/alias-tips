@@ -213,7 +213,7 @@ Use this environmental variable to customize text:
 
 ``````sh
 :
-export ZSH_PLUGINS_ALIAS_TIPS_REVEAL_TEXT="Alias tip: "
+export ZSH_PLUGINS_ALIAS_TIPS_REVEAL_TEXT="Alias for: "
 :
 ``````
 
